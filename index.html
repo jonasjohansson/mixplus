@@ -1,0 +1,74 @@
+<html>
+<head>
+    <title>Mixplus</title>
+    <link href="main.css" rel="stylesheet">
+</head>
+<body class="loading">
+    <main>
+        <aside class="right">
+            <div class="logo"></div>
+            <div class="sc-volume-slider">
+                <div class="volume"></div>
+                <span class="sc-volume-status" ></span>
+            </div>
+        </aside>
+        <div class="sc">
+        </div>
+    </main>
+    <script>
+
+    var $ = function(el) {
+        return document.querySelectorAll(el);
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        function inArray(needle, haystack) {
+            var length = haystack.length;
+            for(var i = 0; i < length; i++) {
+                if(typeof haystack[i] == 'object') {
+                    if (arrayCompare(haystack[i], needle)) return true;
+                } else {
+                    if (haystack[i] == needle) return true;
+                }
+            }
+            return false;
+        }
+
+        SC.initialize({ client_id: 'cef9224262e60e2c07053248f133feed' });
+
+        var playlists = ['jonasjohansson/sets/mixes','stroemen/sets/mixes'],
+            url = 'https://soundcloud.com/',
+            tracks = new Array(),
+            tracks_id = new Array();
+
+        [].forEach.call(playlists, function(playlist, i) {
+            playlist = url+playlist;
+            SC.get('/resolve', { url: playlist }, function(set) {
+                var tracks = set.tracks;
+                tracks.forEach(function(track) {
+                    //if (!inArray(track.id, tracks_id)) {
+                        tracks_id.push(track.id);
+                        t = document.createElement('a');
+                        t.innerHTML = track.title;
+                        t.href = track.permalink_url;
+                        t.classList.add('sc-player');
+                        t.style.display = 'none';
+                        document.querySelector('.sc').appendChild(t);
+                    //}
+                });
+                if (i == playlists.length-1) {
+                    document.body.classList.remove('loading');
+                    $('.sc-player').scPlayer();
+
+                }
+            });
+        });
+    });
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//connect.soundcloud.com/sdk.js"></script>
+    <script src="sc-player.js"></script>
+
+</body>
+</html>

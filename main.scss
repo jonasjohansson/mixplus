@@ -1,0 +1,183 @@
+@import 'bourbon/bourbon';
+@import url(http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css);
+
+$size:14rem;
+
+* {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    background:transparent;
+}
+html {
+    font-size:62.5%;
+    color:rgb(30,30,30);
+    background-color:white; 
+}
+body {
+    line-height:1;
+}
+a {
+    display:block;
+    color:inherit;
+    text-decoration:none;
+}
+img {
+    width:100%;
+    height:100%;
+}
+main {
+    position:relative;
+    width:100%;
+}
+/* volume */
+aside {
+    position:relative;
+    width:100%;
+    height:$size;
+    overflow:hidden;
+    cursor:pointer;
+    .logo {
+        float:left;
+        content:"";
+        width:$size;
+        height:100%;
+        background-image:url(mixplus.svg);
+        background-size:80%;
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    .sc-volume-slider {
+        position:relative;
+        float:right;
+        width:calc(100% - #{$size});
+        height:100%;
+        * {
+            position:absolute;
+            width:100%;
+            height:100%;
+        }
+        span {
+            bottom:0;
+            background-color:rgba(0,0,0,0.1);
+        }
+    }
+}
+.sc-volume-slider,
+.sc-player:nth-of-type(even) {
+    background-color:DodgerBlue;
+    color:white;
+}
+/* sc */
+.sc { 
+    width:calc(100% - #{$size/2});
+    width:100%;
+    min-width:60rem;
+    height:100%;
+    font:normal 1.8rem/1.6 arial;
+}
+/* sc-trackslist */
+ol { 
+    float:left;
+    margin:0;
+    padding:0;
+    width:calc(100% - 48rem);
+    list-style:none;
+    &:before {
+        content:'';
+        display:inline-block;
+    }
+    li {
+        width:100%;
+        overflow:hidden;
+        white-space:nowrap;
+        display:inline-block;
+        text-overflow:ellipsis;
+        text-transform:lowercase;
+        span {
+        }
+    }
+}
+/* sc-player */
+.sc-player {
+    clear:both;
+    position:relative;
+    overflow:hidden;
+    height:$size;
+    @include transition(opacity 400ms ease-in-out,height 400ms ease-in-out);
+    &.loading { opacity:0; }
+    &.playing { height:$size*2; }
+    // wrap
+    > div:first-of-type {
+        height:$size;
+        line-height:2rem;
+        @include clearfix;
+        > * {
+            display:block;
+            float:left;
+            padding:6rem 0;
+            &.sc-controls { padding:4.4rem 3rem; }
+            &.sc-time-indicators {
+                float:right;
+                width:14rem;
+                text-align:right;
+                padding-right:2rem;
+            }
+        }
+    }
+    // scrubber
+    > div:last-of-type {
+        position:relative;
+        width:100%;
+        height:14rem;
+        background-color:white;
+        cursor:pointer;
+        .sc-time-span { 
+            position:absolute;
+            &,.sc-waveform-container {
+                position:relative;
+                z-index:3;
+                float:left;
+                width:100%;
+                height:100%;
+            }
+            .sc-buffer,
+            .sc-played { 
+                z-index:2;
+                position:absolute;
+                top:0;
+                height:100%;
+                background-color:rgba(0,0,0,0.4); 
+            }
+        }
+    }
+    &:nth-of-type(even) .button {
+        color:white;
+    }
+    &:nth-of-type(odd) .button {
+        color:black;
+    }
+}   
+.button {
+    border-radius:0.5rem;
+    box-shadow:0 0 0 1px;
+    display:inline-block;
+    &:not(:last-of-type) { margin-right:2rem; }
+    * {
+        display:block;
+        padding:1.5rem 2.5rem;
+        font-family:"Ionicons";
+        font-size:3rem;
+        cursor:pointer;
+        &.sc-play:before {
+            content:"\f1c7";
+            div.playing & { content:"\f1bd"; }
+        }
+        &.sc-link-external:before { content:"\f1d2"; }
+        &.sc-link-download:before { content:"\f183"; }
+    }
+    &:hover * { background-color:rgba(0,0,0,0.1); }
+    &:active * { background-color:rgba(0,0,0,0.2); }
+}
